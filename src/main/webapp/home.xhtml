@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <!-- Your custom CSS file -->
+    <link href="global.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com"/>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900display=swap" rel="stylesheet"/>
+    <title>#{msg['student.list.title']}</title>
+
+    <style>
+        *{
+            caret-color: transparent;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            padding: 4% 8%;
+            font-family: 'Poppins', sans-serif;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            margin: 0;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 0 0 4% 0;
+
+        }
+
+        h2 {
+            color: #ff4444;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+
+
+            -webkit-border-top-left-radius: 10px;
+            -webkit-border-top-right-radius: 10px;
+            -moz-border-radius-topleft: 10px;
+            -moz-border-radius-topright: 10px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+
+
+            overflow: hidden; /* Ensures the border-radius is applied correctly */
+        }
+
+        .table th {
+            background-color: #333333;
+            color: #ffffff;
+            padding: 18px;
+            font-size: 16px;
+        }
+
+
+        .table td {
+            border: 1px solid #333333;
+            padding: 8px;
+        }
+
+        .table tr{
+            transition: 0.3s ease-in-out;
+        }
+
+        .table tr:hover {
+            background-color: #333333;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center; /* Center the buttons horizontally */
+        }
+
+        .button {
+            border: 2px solid #ff4444;
+            background-color: #ff4444;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 16px;
+            text-align: center;
+            border-radius: 5px;
+            padding: 8px 16px;
+            text-decoration: none;
+            cursor: pointer;
+            width: 140px;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+            margin: 0 4px;
+        }
+
+        .button:hover {
+            background-color: transparent;
+            color: #ff4444;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination .button {
+            border: 2px solid #ff4444;
+            background-color: #ff4444;
+            color: #ffffff;
+            border-radius: 5px;
+            padding: 8px 16px;
+            text-decoration: none;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+            margin: 0 4px; /* Add spacing between buttons */
+        }
+
+        .pagination .button:hover {
+            background-color: transparent;
+            color: #ff4444;
+        }
+
+        .input-field {
+            caret-color: #ff4444;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #555555;
+            color:#ffffff;
+            font-weight: 500;
+            font-size: 16px;
+            width: 100%;
+            box-sizing: border-box; /* Ensure padding is included in width */
+            transition: 0.3s ease-in-out;
+        }
+
+        .input-field:hover{
+            outline: none; /* Remove default focus outline */
+            border-color: #ff4444;
+        }
+
+        .input-field:focus {
+            outline: none; /* Remove default focus outline */
+            border-color: #ff4444; /* Change border color on focus */
+        }
+
+
+
+    </style>
+
+</h:head>
+<h:body>
+    <div class="header">
+        <h2>Students List</h2>
+    </div>
+    <h:selectOneMenu value="#{languages.localeCode}">
+        <f:selectItems value="#{languages.countries}" var="country" itemValue="#{country.value}" itemLabel="#{country.key}" />
+        <f:ajax execute="@this" render="@this" listener="#{languages.changeLocale}" />
+    </h:selectOneMenu>
+
+
+
+    <h:form>
+        <h:dataTable value="#{students.listStudents()}" var="std" class="table table-dark table-striped" rows="10">
+            <h:column>
+                <f:facet name="header"> #{msg['student.list.name']} </f:facet>
+                <h:outputText value="#{std.first_name}" rendered="#{std.email ne students.selectedStd.email}"/>
+                <h:inputText value="#{students.selectedStd.first_name}" rendered="#{std.email eq students.selectedStd.email}" required="true" class="input-field"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header"> #{msg['student.list.age']} </f:facet>
+                <h:outputText value="#{std.age}" rendered="#{std.email ne students.selectedStd.email}"/>
+                <h:inputText value="#{students.selectedStd.age}" rendered="#{std.email eq students.selectedStd.email}" required="true" class="input-field" />
+            </h:column>
+            <h:column>
+                <f:facet name="header"> #{msg['student.list.email']} </f:facet>
+                <h:outputText value="#{std.email}" rendered="#{std.email ne students.selectedStd.email}"/>
+                <h:inputText value="#{students.selectedStd.email}" rendered="#{std.email eq students.selectedStd.email}" required="true"  class="input-field" />
+            </h:column>
+            <h:column>
+                <f:facet name="header"> #{msg['student.list.edit.delete']} </f:facet>
+                <div class="button-container">
+                    <h:commandButton class="button" value="Edit" action="#{students.setSelectedStd(std)}" rendered="#{std.email ne students.selectedStd.email}" />
+                    <h:commandButton class="button" value="Confirmer" action="#{students.editStudent(students.selectedStd)}" rendered="#{std.email eq students.selectedStd.email}" />
+                    <h:commandButton class="button" value="Delete" action="#{students.deleteStudent(std.id)}" rendered="#{std.email ne students.selectedStd.email}" />
+                </div>
+            </h:column>
+
+        </h:dataTable>
+
+
+        <h:commandLink value="&lt;&lt; First" action="#{students.setCurrentPage(1)}" rendered="#{students.currentPage gt 1}" class="button"/>
+        <h:commandLink value="&lt; Prev" action="#{students.previousPage()}" rendered="#{students.currentPage gt 1}" class="button"/>
+        <h:commandLink value="Next &gt;" action="#{students.nextPage()}" rendered="#{students.currentPage lt students.totalpages}" class="button"/>
+        <h:commandLink value="Last &gt;&gt;" action="#{students.setCurrentPage(students.totalpages)}" rendered="#{students.currentPage lt students.totalpages}" class="button"/>
+
+        <h:commandButton class="button" value=" Add student " action="#{students.showAddForm()}" rendered="#{students.selectedStd eq null}"/>
+    </h:form>
+
+
+    <h:form>
+        <h:panelGrid columns="2" rendered="#{students.addForm}" >
+            <h:outputLabel for="firstName">First Name:</h:outputLabel>
+            <h:inputText id="firstName" value="#{students.newStudent.first_name}" required="true" />
+
+            <h:outputLabel for="age">Age:</h:outputLabel>
+            <h:inputText id="age" value="#{students.newStudent.age}" required="true"/>
+
+            <h:outputLabel for="email">Email:</h:outputLabel>
+            <h:inputText id="email" value="#{students.newStudent.email}" required="true"/>
+
+            <h:commandButton class="button" value="Save Student" action="#{students.addStudent()}" />
+        </h:panelGrid>
+    </h:form>
+
+
+</h:body>
+</html>
